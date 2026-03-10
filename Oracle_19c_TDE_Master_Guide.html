@@ -161,7 +161,12 @@ grep -o aes /proc/cpuinfo | head -1</pre>
             <pre>
 <span class="comment">-- 1. Confirm 19c and CDB architecture</span>
 <span class="keyword">SELECT</span> version, cdb <span class="keyword">FROM</span> v$database ;
-
+<span class="keyword">COLUMN</span> is_cdb     <span class="keyword">FORMAT</span> a6
+<span class="keyword">COLUMN</span> db_version <span class="keyword">FORMAT</span> a100
+<span class="keyword">SELECT</span> d.cdb is_cdb, v.banner_full db_version
+<span class="keyword">FROM</span> v$database d, v$version v 
+<span class="keyword">WHERE</span> d.con_id = v.con_id ;</pre>
+<pre>
 <span class="comment">-- 2. Verify all PDBs are in READ WRITE mode (Required for key settings)</span>
 <span class="keyword">SELECT</span> name, open_mode <span class="keyword">FROM</span> v$pdbs ;
 
@@ -315,3 +320,4 @@ grep -o aes /proc/cpuinfo | head -1</pre>
 
 </body>
 </html>
+
