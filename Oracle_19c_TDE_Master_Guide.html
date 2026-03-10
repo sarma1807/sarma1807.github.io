@@ -170,8 +170,8 @@ grep -o aes /proc/cpuinfo | head -1</pre>
 <span class="keyword">COLUMN</span> pdb_name <span class="keyword">FORMAT</span> a20
 <span class="keyword">SELECT</span> name pdb_name, open_mode <span class="keyword">FROM</span> v$pdbs ;
 
-<span class="comment">-- 3. Check for legacy wallet settings (Should be empty for WALLET_ROOT)</span>
-<span class="keyword">SHOW PARAMETER</span> wallet ;</pre>
+<span class="comment">-- 3. Check for legacy wallet settings (should be empty)</span>
+<span class="keyword">SHOW PARAMETER</span> wallet_root ;</pre>
         </div>
     </section>
 
@@ -320,6 +320,7 @@ grep -o aes /proc/cpuinfo | head -1</pre>
 
 </body>
 </html>
+
 
 
 
