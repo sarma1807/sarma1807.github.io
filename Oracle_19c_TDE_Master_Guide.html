@@ -167,7 +167,8 @@ grep -o aes /proc/cpuinfo | head -1</pre>
 <span class="keyword">WHERE</span> d.con_id = v.con_id ;</pre>
 <pre>
 <span class="comment">-- 2. Verify all PDBs are in READ WRITE mode (Required for key settings)</span>
-<span class="keyword">SELECT</span> name, open_mode <span class="keyword">FROM</span> v$pdbs ;
+<span class="keyword">COLUMN</span> pdb_name <span class="keyword">FORMAT</span> a20
+<span class="keyword">SELECT</span> name pdb_name, open_mode <span class="keyword">FROM</span> v$pdbs ;
 
 <span class="comment">-- 3. Check for legacy wallet settings (Should be empty for WALLET_ROOT)</span>
 <span class="keyword">SHOW PARAMETER</span> wallet ;</pre>
@@ -319,5 +320,6 @@ grep -o aes /proc/cpuinfo | head -1</pre>
 
 </body>
 </html>
+
 
 
