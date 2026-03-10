@@ -159,8 +159,7 @@ grep -o aes /proc/cpuinfo | head -1</pre>
         <div class="code-container">
             <span style="font-size: 0.8rem; font-weight: bold; color: #666;">ORACLE SQL COMMANDS</span>
             <pre>
-<span class="comment">-- 1. Confirm 19c and CDB architecture</span>
-<span class="keyword">SELECT</span> version, cdb <span class="keyword">FROM</span> v$database ;
+<span class="comment">-- 1. Confirm db version is 19c and db is a Container (CDB)</span>
 <span class="keyword">COLUMN</span> is_cdb     <span class="keyword">FORMAT</span> a6
 <span class="keyword">COLUMN</span> db_version <span class="keyword">FORMAT</span> a100
 <span class="keyword">SELECT</span> d.cdb is_cdb, v.banner_full db_version
@@ -320,4 +319,5 @@ grep -o aes /proc/cpuinfo | head -1</pre>
 
 </body>
 </html>
+
 
