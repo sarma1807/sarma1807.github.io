@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Index</title>
+  <style>
+    body {
+      font-family: monospace;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #1e1e1e;
+      color: #d4d4d4;
+    }
+    h1 {
+      font-size: 1.2rem;
+      color: #9cdcfe;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 4px 0;
+    }
+    li::before {
+      content: "› ";
+      color: #569cd6;
+    }
+    a {
+      color: #4ec9b0;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+      color: #9cdcfe;
+    }
+    #status {
+      color: #808080;
+      font-size: 0.85rem;
+      margin-top: 16px;
+    }
+    #error {
+      color: #f48771;
+      font-size: 0.85rem;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>HTML / HTM Files</h1>
+  <ul id="file-list"></ul>
+  <div id="status"></div>
+  <div id="error"></div>
+
+  <script>
+    (async function () {
+      const list = document.getElementById('file-list');
+      const status = document.getElementById('status');
+      const error = document.getElementById('error');
+      const currentFile = 'index.html';
+
+      try {
+        // Fetch the directory listing from the server
+        const res = await fetch(window.location.href);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const text = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+
+        // Collect all anchor hrefs that point to .html / .htm files
+        const isHtmlFile = href => /\.(html|htm)$/i.test(href);
+        const anchors = Array.from(doc.querySelectorAll('a[href]'));
+        const htmlFiles = anchors
+          .map(a => a.getAttribute('href'))
+          .filter(href => {
+            // Keep only local .html/.htm files, exclude index.html itself
+            const filename = href.replace(/^.*\//, '');
+            return (
+              isHtmlFile(href) &&
+              !href.startsWith('http') &&
+              !href.startsWith('//') &&
+              filename !== currentFile
+            );
+          })
+          // Deduplicate
+          .filter((v, i, arr) => arr.indexOf(v) === i);
+
+        if (htmlFiles.length === 0) {
+          status.textContent = 'No .html or .htm files found in this directory.';
+          return;
+        }
+
+        htmlFiles.sort().forEach(href => {
+          const name = href.replace(/^.*\//, ''); // strip path prefix if any
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = href;
+          a.textContent = name;
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+
+        status.textContent = `${htmlFiles.length} file(s) found.`;
+      } catch (err) {
+        error.textContent =
+          'Could not read directory listing.';
+        console.error(err);
+      }
+    })();
+  </script>
+</body>
+</html>
